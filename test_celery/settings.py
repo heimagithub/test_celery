@@ -134,13 +134,6 @@ CELERY_TIMEZONE='Asia/Taipei'
 from datetime import timedelta
 
 CELERY_IMPORTS = (
-    'test_celery.tasks',
-    )
+    'hook.tasks',
+)
 
-CELERYBEAT_SCHEDULE = {
-    'add-every-30-seconds': {
-         'task': 'test_celery.tasks.add',
-         'schedule': timedelta(seconds=5),
-         'args': (16, 16)
-    },
-}
