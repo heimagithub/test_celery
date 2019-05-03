@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'hook',
+    'test_celery',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'test_celery.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'test_celery',
+        'USER': 'root',
+        'PASSWORD': '0',
+        'PORT': 3306,
     }
 }
 
@@ -118,3 +124,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+# CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE='Asia/Taipei'
+
+from datetime import timedelta
+
+CELERY_IMPORTS = (
+    'test_celery.tasks',
+    )
+
+CELERYBEAT_SCHEDULE = {
+    'add-every-30-seconds': {
+         'task': 'test_celery.tasks.add',
+         'schedule': timedelta(seconds=5),
+         'args': (16, 16)
+    },
+}
