@@ -10,3 +10,5 @@ from .models import stock
 def say():
     print('hello')
     stock.objects.create(created_at=datetime.now())
+
+
